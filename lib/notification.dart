@@ -13,7 +13,7 @@ import 'package:waset_management/screans/main.dart';
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    'This channel is used for important notifications.', // description
+    description:'This channel is used for important notifications.', // description
     importance: Importance.high,
     playSound: true);
 
@@ -24,7 +24,7 @@ final androidDetails = NotificationDetails(
     android: AndroidNotificationDetails(
   channel.id,
   channel.name,
-  channel.description,
+  channelDescription:channel.description,
   color: Colors.blue,
   playSound: true,
   icon: '@mipmap/ic_launcher',

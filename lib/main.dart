@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waset_management/constants.dart';
@@ -16,6 +17,7 @@ final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 late SharedPreferences prefs;
 var user;
 final navKey = GlobalKey<NavigatorState>();
+late Position userPosition;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +26,7 @@ void main() async {
   if (prefs.get('user') != null) {
     user = jsonDecode(prefs.getString('user')!);
   }
-  ////////////////////
+  
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
 
@@ -42,10 +44,8 @@ void main() async {
         initialpos: LatLng(double.parse(payload.split('/')[1]),
             double.parse(payload.split('/')[1])),
       ));
-      return null;
     },
   );
-  ////////////////////
   runApp(const MyApp());
 }
 

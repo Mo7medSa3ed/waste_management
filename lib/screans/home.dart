@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -19,21 +18,35 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Map> baskets = [];
   int selectedBasket = 0;
-  double distance = 0;
+  num distance = 0;
+
   getColor() {
-    return distance >= 1000 ? Colors.red.shade900 : kprimary;
+    final capacity = baskets[selectedBasket]['data']['capacity'];
+    if (distance > ((capacity / 3) * 2.3)) {
+      return Colors.red.shade900;
+    } else if (distance <= capacity / 2) {
+      return kprimary;
+    } else {
+      return Colors.yellow.shade700;
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    getPosition().then((value) => userPosition = value);
     getAllBaskets();
   }
 
   getAllBaskets() async {
-    FirebaseFirestore.instance.collection('baskets').get().then((value) {
+    FirebaseFirestore.instance
+        .collection('baskets')
+        .where('type', isNotEqualTo: 'recycling')
+        .get()
+        .then((value) {
       setState(() {
-        baskets = value.docs.map((e) => {'data': e, 'exist': true}).toList();
+        baskets =
+            value.docs.reversed.map((e) => {'data': e, 'exist': true}).toList();
       });
       getSensor();
     });
@@ -50,18 +63,17 @@ class _HomeState extends State<Home> {
         setState(() {});
         return;
       }
-
       final dis = double.parse(event.snapshot.value.toString());
-      if (distance >= 1000 && dis >= 1000) return;
+      final capacity = baskets[selectedBasket]['data']['capacity'];
+      if (distance >= capacity && dis >= capacity) return;
       distance = dis;
-      if (distance >= 1000) {
-        distance = 1000;
+      if (distance >= capacity) {
+        distance = capacity;
         final pos =
             "${baskets[selectedBasket]['lat']}/${baskets[selectedBasket]['lng']}";
         await sendNotification("Mohamed", "Go To Basket To empty him...", pos);
       }
-
-      if (mounted) setState(() {});
+      setState(() {});
     });
   }
 
@@ -80,7 +92,10 @@ class _HomeState extends State<Home> {
             fit: BoxFit.cover,
             color: getColor(),
           ),
-          SizedBox(height: distance >= 1000 ? 0.0 : 10.0),
+          SizedBox(
+              height: distance >= baskets[selectedBasket]['data']['capacity']
+                  ? 0.0
+                  : 10.0),
           Expanded(
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -103,13 +118,12 @@ class _HomeState extends State<Home> {
                     child: WaveWidget(
                       config: config!,
                       waveFrequency: 0,
-                      heightPercentange: 0.1,
+                      heightPercentange: 0.0,
                       wavePhase: 0,
-                      isLoop: false,
                       backgroundColor: backgroundColor,
                       backgroundImage: backgroundImage,
                       size: const Size(double.infinity, double.infinity),
-                      waveAmplitude: 0,
+                      waveAmplitude: -8,
                     ),
                   )),
             ),
@@ -153,11 +167,11 @@ class _HomeState extends State<Home> {
           bottom: TabBar(
               onTap: (value) {
                 selectedBasket = value;
+                setState(() {});
                 getSensor();
               },
               indicatorColor: Colors.white,
               indicatorWeight: 4,
-              // isScrollable: true,
               labelColor: Colors.white,
               tabs: baskets
                   .map((e) => Tab(
@@ -172,22 +186,23 @@ class _HomeState extends State<Home> {
                 ? Container()
                 : _buildCard(
                     backgroundColor:
-                        distance >= 1000 ? Colors.red.shade500 : Colors.white,
+                        distance >= baskets[selectedBasket]['data']['capacity']
+                            ? Colors.red.shade500
+                            : Colors.white,
                     config: CustomConfig(
                       gradients: List.generate(4, (index) {
-                        return distance >= 1000
-                            ? [Colors.red.shade900, Colors.red]
-                            : [
-                                kprimary.withOpacity(0.9),
-                                kprimary.withOpacity(0.1)
-                              ];
+                        return [getColor(), getColor().withOpacity(0.2)];
                       }),
                       durations: List.generate(4, (index) => 1200),
-                      heightPercentages:
-                          List.generate(4, (index) => 1 - (distance / 1000)),
+                      heightPercentages: List.generate(
+                          4,
+                          (index) =>
+                              1 -
+                              (distance /
+                                  baskets[selectedBasket]['data']['capacity'])),
                       blur: const MaskFilter.blur(BlurStyle.normal, 0.0),
-                      gradientBegin: Alignment.bottomLeft,
-                      gradientEnd: Alignment.topRight,
+                      gradientBegin: Alignment.bottomCenter,
+                      gradientEnd: Alignment.topCenter,
                     ),
                   );
           }).toList(),

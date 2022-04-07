@@ -9,6 +9,7 @@ class PrimaryText extends StatelessWidget {
     this.color = kblack,
     this.fontSizeRatio = 1,
     this.maxlines,
+    this.textDirection,
     this.overflow,
     this.textStyle,
     this.fontWeight = FontWeight.normal,
@@ -21,6 +22,7 @@ class PrimaryText extends StatelessWidget {
   final int? maxlines;
   final TextOverflow? overflow;
   final TextStyle? textStyle;
+  final TextDirection? textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class PrimaryText extends StatelessWidget {
       textAlign: textAlign,
       maxLines: maxlines,
       overflow: overflow,
+      textDirection: textDirection,
       style: textStyle ??
           TextStyle(
               color: color ?? kprimary,
