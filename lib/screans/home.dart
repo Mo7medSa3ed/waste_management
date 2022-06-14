@@ -15,20 +15,33 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   List<Map> baskets = [];
   int selectedBasket = 0;
   num distance = 0;
+  late TabController tabController;
 
   getColor() {
     final capacity = baskets[selectedBasket]['data']['capacity'];
-    if (distance > ((capacity / 3) * 2.3)) {
-      return Colors.red.shade900;
-    } else if (distance <= capacity / 2) {
+    double percent = distance / capacity * 100;
+    if (percent >= 90.0 && percent < 100.0) {
+      return Colors.red.shade600;
+    } else if (percent >= 60.0 && percent < 90.0) {
+      return Colors.yellow.shade700;
+    } else if (percent >= 30.0 && percent < 60.0) {
+      return Colors.green.shade300;
+    } else if (percent >= 0.0 && percent < 30.0) {
       return kprimary;
     } else {
-      return Colors.yellow.shade700;
+      return Colors.red.shade900;
     }
+  }
+
+  String getPercent() {
+    final capacity = baskets[selectedBasket]['data']['capacity'];
+    double res = 0.0;
+    res = distance / capacity;
+    return (res * 100).toStringAsFixed(0) + ' %';
   }
 
   @override
@@ -44,10 +57,10 @@ class _HomeState extends State<Home> {
         .where('type', isNotEqualTo: 'recycling')
         .get()
         .then((value) {
-      setState(() {
-        baskets =
-            value.docs.reversed.map((e) => {'data': e, 'exist': true}).toList();
-      });
+      baskets =
+          value.docs.reversed.map((e) => {'data': e, 'exist': true}).toList();
+      setState(() {});
+      tabController = TabController(length: baskets.length, vsync: this);
       getSensor();
     });
   }
@@ -65,13 +78,18 @@ class _HomeState extends State<Home> {
       }
       final dis = double.parse(event.snapshot.value.toString());
       final capacity = baskets[selectedBasket]['data']['capacity'];
+
       if (distance >= capacity && dis >= capacity) return;
-      distance = dis;
+      distance = capacity - dis;
       if (distance >= capacity) {
         distance = capacity;
         final pos =
             "${baskets[selectedBasket]['lat']}/${baskets[selectedBasket]['lng']}";
-        await sendNotification("Mohamed", "Go To Basket To empty him...", pos);
+        if (user['type'] == 'employee')
+          await sendNotification(
+              user['username'],
+              "Go To Basket ${baskets[selectedBasket]['data']['name']} To empty him...",
+              pos);
       }
       setState(() {});
     });
@@ -97,35 +115,48 @@ class _HomeState extends State<Home> {
                   ? 0.0
                   : 10.0),
           Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: getColor(),
-                    border: Border(
-                        bottom: BorderSide(color: getColor(), width: 6),
-                        left: BorderSide(color: getColor(), width: 6),
-                        right: BorderSide(color: getColor(), width: 6)),
-                  ),
+            child: Stack(
+              children: [
+                Positioned.fill(
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
                     ),
-                    child: WaveWidget(
-                      config: config!,
-                      waveFrequency: 0,
-                      heightPercentange: 0.0,
-                      wavePhase: 0,
-                      backgroundColor: backgroundColor,
-                      backgroundImage: backgroundImage,
-                      size: const Size(double.infinity, double.infinity),
-                      waveAmplitude: -8,
-                    ),
-                  )),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: getColor(),
+                          border: Border(
+                              bottom: BorderSide(color: getColor(), width: 6),
+                              left: BorderSide(color: getColor(), width: 6),
+                              right: BorderSide(color: getColor(), width: 6)),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(25),
+                            bottomRight: Radius.circular(25),
+                          ),
+                          child: WaveWidget(
+                            config: config!,
+                            waveFrequency: 0,
+                            heightPercentange: 0.0,
+                            wavePhase: 0,
+                            backgroundColor: backgroundColor,
+                            backgroundImage: backgroundImage,
+                            size: const Size(double.infinity, double.infinity),
+                            waveAmplitude: -8,
+                          ),
+                        )),
+                  ),
+                ),
+                Align(
+                  child: PrimaryText(
+                    text: getPercent(),
+                    fontSizeRatio: 2.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              ],
             ),
           ),
         ],
@@ -156,6 +187,7 @@ class _HomeState extends State<Home> {
     }
     return DefaultTabController(
       length: baskets.length,
+      initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -181,6 +213,7 @@ class _HomeState extends State<Home> {
         ),
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
+          controller: tabController,
           children: baskets.map<Widget>((e) {
             return !e['exist']
                 ? Container()
@@ -199,7 +232,8 @@ class _HomeState extends State<Home> {
                           (index) =>
                               1 -
                               (distance /
-                                  baskets[selectedBasket]['data']['capacity'])),
+                                  baskets[selectedBasket]['data']['capacity']) -
+                              0.1),
                       blur: const MaskFilter.blur(BlurStyle.normal, 0.0),
                       gradientBegin: Alignment.bottomCenter,
                       gradientEnd: Alignment.topCenter,

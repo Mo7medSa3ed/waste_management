@@ -8,7 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:waset_management/constants.dart';
 import 'package:waset_management/main.dart';
-import 'package:waset_management/navigator.dart';
 import 'package:waset_management/widgets/primary_text.dart';
 
 class Map extends StatefulWidget {
@@ -66,10 +65,7 @@ class _MapState extends State<Map> {
     }
   }
 
-  goTo(LatLng pos) async {
-    await _controller.animateCamera(
-        CameraUpdate.newCameraPosition(CameraPosition(target: pos)));
-  }
+  
 
   showDialogForTrash(trash, double currant) {
     showDialog(
@@ -101,12 +97,12 @@ class _MapState extends State<Map> {
               ),
               const SizedBox(height: 16),
               // if (currant.toInt() == 100)
-              if (false)
-                TextButton(
-                    onPressed: () async {
-                      await goToNearstBasket();
-                    },
-                    child: const Text('للذهاب لاقرب سلة غير ممتلئة اضغط هنا')),
+              // if (false)
+              //   TextButton(
+              //       onPressed: () async {
+              //         // await goToNearstBasket();
+              //       },
+              //       child: const Text('للذهاب لاقرب سلة غير ممتلئة اضغط هنا')),
               const SizedBox(height: 16),
               PrimaryText(
                 text: trash['address'],
@@ -119,28 +115,7 @@ class _MapState extends State<Map> {
     );
   }
 
-  Future<void> goToNearstBasket() async {
-    final nearstBasket = baskets.reduce((value, element) {
-      return Geolocator.distanceBetween(
-                  userPosition.latitude,
-                  userPosition.longitude,
-                  double.parse(value['lat']),
-                  double.parse(value['lng'])) <
-              Geolocator.distanceBetween(
-                  userPosition.latitude,
-                  userPosition.longitude,
-                  double.parse(element['lat']),
-                  double.parse(element['lng']))
-          ? value
-          : element;
-    });
-    print(nearstBasket);
-    // final lat = double.parse(nearstBasket['lat']);
-    // final lng = double.parse(nearstBasket['lng']);
-    // Nav.pop();
-    // await goTo(LatLng(lat, lng));
-  }
-
+  
   @override
   void initState() {
     super.initState();

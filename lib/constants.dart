@@ -104,7 +104,6 @@ Future<Position> getPosition() async {
   LocationPermission permission;
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-
     return Future.error('Location services are disabled.');
   }
   permission = await Geolocator.checkPermission();
