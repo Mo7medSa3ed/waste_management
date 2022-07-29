@@ -6,6 +6,15 @@ To preserve natural areas, it is important to provide well-managed waste collect
 To prevent them from overflowing, the bins must be raised regularly. It is hard to get through the right time: too soon, and the trash can be empty, too late and the trash can overflow. This problem is all the more critical when the bin is difficult to access (such as on hiking trails in the mountains).
 <br/>
 
+## Steps of project
+<ol>
+<li> ultrasonic sensor to measure distance of basket.</li>
+ <li>Connect Arduino wire with sensor. </li>
+ <li>Arduino take data from sensor and at the same time led work as indicator and lcd display ratio of trash level. </li>
+ <li>Arduino take location from bin to app. </li>
+ <li>Nodemcu take data from Arduino and send it for cloud.  </li>
+ <li>Application take data from cloud and display the read of data and select the best path.</li>
+</ol>
 
 ## Screenshots
 
