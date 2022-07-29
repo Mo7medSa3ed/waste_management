@@ -8,7 +8,7 @@ To prevent them from overflowing, the bins must be raised regularly. It is hard 
 
 ## Steps of project
 <ol>
-<li> ultrasonic sensor to measure distance of basket.</li>
+<li>Ultrasonic sensor to measure distance of basket.</li>
  <li>Connect Arduino wire with sensor. </li>
  <li>Arduino take data from sensor and at the same time led work as indicator and lcd display ratio of trash level. </li>
  <li>Arduino take location from bin to app. </li>
