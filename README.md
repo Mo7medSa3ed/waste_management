@@ -9,16 +9,14 @@ To prevent them from overflowing, the bins must be raised regularly. It is hard 
 
 ## Screenshots
 
-![App Screenshot](https://drive.google.com/file/d/1IkwCwBRpNwIrrz8CAQiWYDoo0riU843U/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/1hLZFUH_Ijp0lClHJjL5Q-bPxwUfo3F3e/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/1v1yKJFlLltM3N8KtzvBvfQb_cmb0AusU/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/12_ZO4I_QS68SJyNe7CDl9P2ODF3U15Wv/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/1A4MWl0CvyCWSZAD_fTJfA_dz_nJmd7IG/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/1hq-wtSAaOP-xmmmX2sFQFHDyJD-6jwYo/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/1swgyZEUMmsZv3nEF9eS40JaXiA49IgFV/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/10fzAeVJqy1dZSr0rmvhjN_8otYeEEOD7/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/1t3_jBdogeR1UMyaMgKF-70T89wmKvI1o/view?usp=sharing)
-![App Screenshot](https://drive.google.com/file/d/18Pb3FKTcscFDSSvWD3yibPjhCGAVYu9h/view?usp=sharing)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122397/My%20app%20sceanshots/waste%20management/Screenshot_1659121196_kscgxu.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122395/My%20app%20sceanshots/waste%20management/Screenshot_1659121148_sxts9z.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122394/My%20app%20sceanshots/waste%20management/Screenshot_1659121202_o30k6i.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122394/My%20app%20sceanshots/waste%20management/Screenshot_1659121233_n6o8jf.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122392/My%20app%20sceanshots/waste%20management/Screenshot_1659121152_sgvw3k.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122390/My%20app%20sceanshots/waste%20management/Screenshot_1659121176_owexxo.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122387/My%20app%20sceanshots/waste%20management/Screenshot_1659121183_fquaaj.png)
+![App Screenshot](https://res.cloudinary.com/de6wqnjl3/image/upload/c_scale,h_400,w_200/v1659122386/My%20app%20sceanshots/waste%20management/Screenshot_1659121242_p6jbij.png)
 
 This project is a starting point for a Flutter application.
 
